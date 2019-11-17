@@ -1,0 +1,25 @@
+version: "3"
+services:
+  mongodb:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+  backend:
+    build: ./backend/
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./backend:/usr/src/backendapp
+    depends_on:
+      - mongodb
+  frontend:
+    build: ./frontend/
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/usr/src/frontendapp
+    depends_on:
+      - backend
